@@ -36,4 +36,4 @@ with open("FILE_NAME.txt", "w") as f:
     f.write(formatted_text)
     print("[*] Transcription complete")
 
-print("[*] Transcription saved to transcript.txt")
+print("[*] Transcription saved to FILE_NAME.txt")
