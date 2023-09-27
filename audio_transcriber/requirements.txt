@@ -1,1 +1,2 @@
 assemblyai
+customtkinter
