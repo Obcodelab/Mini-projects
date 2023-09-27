@@ -1,14 +1,10 @@
 import os
+import logging
 
-print("[*] Checking if assemblyai is installed.....")
+# Set up logging
+logging.basicConfig(filename='transcription.log', level=logging.INFO)
 
-try:
-    import assemblyai as aai
-
-    print("[*] Assemblyai is installed")
-    print("[*] Running the program")
-
-except ImportError:
+def install_assemblyai():
     print("[*] Assemblyai is not installed")
     print("[*] Installing assemblyai")
     os.system("pip3 install assemblyai -q")
@@ -16,26 +12,50 @@ except ImportError:
     print("[*] Restarting the program")
     import assemblyai as aai
 
-# replace with your API token
+    return aai
+
+try:
+    import assemblyai as aai
+except ImportError:
+    aai = install_assemblyai()
+
+# Replace with your API token
 api_key = input("[*] Enter your API key: ")
-aai.settings.api_key = f"{api_key}"
+
+# Validate API key format
+if not api_key or len(api_key) != 64:
+    print("[*] Invalid API key format")
+    exit(1)
+
+aai.settings.api_key = api_key
 
 # URL of the file to transcribe
 FILE_URL = input("[*] Enter the file path: ")
 
-# Transcribe the file
-transcriber = aai.Transcriber()
-transcript = transcriber.transcribe(FILE_URL)
+# Validate file URL format (you can add more validation logic here)
+if not FILE_URL.startswith("http"):
+    print("[*] Invalid file URL format")
+    exit(1)
 
-# Formats the text
-text = transcript.text
-print("[*] Transcription complete")
-file_name = input("[*] Enter the file name: ")
-sentences = text.split(". ")
-formatted_text = "\n".join(sentences)
+try:
+    # Transcribe the file
+    transcriber = aai.Transcriber()
+    transcript = transcriber.transcribe(FILE_URL)
 
-# Saves the transcription to a file
-with open(f"{file_name}.txt", "w") as f:
-    f.write(formatted_text)
+    # Formats the text
+    text = transcript.text
+    print("[*] Transcription complete")
+    file_name = input("[*] Enter the file name: ")
+    sentences = text.split(". ")
+    formatted_text = "\n".join(sentences)
 
-print(f"[*] Transcription saved to {file_name}.txt")
+    # Saves the transcription to a file
+    with open(f"{file_name}.txt", "w") as f:
+        f.write(formatted_text)
+
+    print(f"[*] Transcription saved to {file_name}.txt")
+    logging.info(f"Transcription saved to {file_name}.txt")
+except Exception as e:
+    print("[*] An error occurred during transcription:")
+    print(str(e))
+    logging.error("Error during transcription:", exc_info=True)
