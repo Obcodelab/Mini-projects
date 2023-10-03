@@ -36,3 +36,4 @@ This program transcribes an audio file and saves it in a txt file using assembly
 
 - Time taken for the program to run depends on the duration of the audio file
 - Check out [FAQ](https://www.assemblyai.com/docs/Concepts/faq) for audio file formats and api limits
+- Check out [CONCEPTS](https://www.assemblyai.com/docs/models/speech-recognition#automatic-language-detection) for more info on automatic language detection supported languages
