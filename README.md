@@ -1,1 +1,1 @@
-# This repository contains basic python programs
+# This repository contains personal python projects
