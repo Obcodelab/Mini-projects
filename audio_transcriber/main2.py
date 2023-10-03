@@ -32,7 +32,7 @@ if not api_key or len(api_key) != 32:
 aai.settings.api_key = api_key
 
 # URL of the file to transcribe
-FILE_URL = input("[*] Enter the file path: ")
+FILE_URL = input("[*] Enter the file path or url: ")
 
 try:
     # Create a new TranscriptionConfig
@@ -65,6 +65,5 @@ try:
     logging.info(f"Transcription saved to {file_name}.txt")
 
 except Exception as e:
-    print("[*] An error occurred during transcription:")
-    print(str(e))
+    print(f"Transcription failed: {e}")
     logging.error("Error during transcription:", exc_info=True)
