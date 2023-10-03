@@ -35,20 +35,31 @@ aai.settings.api_key = api_key
 FILE_URL = input("[*] Enter the file path: ")
 
 try:
+    # Create a new TranscriptionConfig
+    config = aai.TranscriptionConfig(language_detection=True)
+
     # Transcribe the file
-    transcriber = aai.Transcriber()
+    transcriber = aai.Transcriber(config=config)
     transcript = transcriber.transcribe(FILE_URL)
+
+    # Checks for errors
+    if transcript.status == aai.TranscriptStatus.error:
+        print(f"Transcription failed: {transcript.error}")
 
     # Formats the text
     text = transcript.text
     print("[*] Transcription complete")
     file_name = input("[*] Enter the file name: ")
-    sentences = text.split(". ")
-    formatted_text = "\n".join(sentences)
+    sentences = transcript.get_sentences()
+    formatted_sentences = []
+    for sentence in sentences:
+        formatted_text = sentence.text
+        formatted_sentences.append(formatted_text)
 
     # Saves the transcription to a file
     with open(f"{file_name}.txt", "w") as f:
-        f.write(formatted_text)
+        for formatted_text in formatted_sentences:
+            f.write(formatted_text + "\n")
 
     print(f"[*] Transcription saved to {file_name}.txt")
     logging.info(f"Transcription saved to {file_name}.txt")
