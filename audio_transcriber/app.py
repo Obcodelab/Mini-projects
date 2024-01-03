@@ -66,14 +66,17 @@ def transcribe(event=None):
     transcriber = aai.Transcriber()
     transcript = transcriber.transcribe(FILE_URL)
     text = transcript.text
-    sentences = text.split(". ")
-    formatted_text = "\n".join(sentences)
-    with open("transcript.txt", "w") as f:
-        f.write(formatted_text)
-    if counter <= 1:
-        transcription.configure(text="Transcription saved to txt file 1 time")
-    elif counter > 1:
-        transcription.configure(text=f"Transcription saved to txt file {counter} times")
+    if text is not None:
+        sentences = text.split(". ")
+        formatted_text = "\n".join(sentences)
+        with open("transcript.txt", "w") as f:
+            f.write(formatted_text)
+        if counter <= 1:
+            transcription.configure(text="Transcription saved to txt file 1 time")
+        elif counter > 1:
+            transcription.configure(
+                text=f"Transcription saved to txt file {counter} times"
+            )
 
 
 api_key_label = Ctk.CTkLabel(root, text="API Key : ")
@@ -88,8 +91,8 @@ url_label.grid(row=1, column=0, padx=5, pady=5, sticky="nsew")
 url_entry = Ctk.CTkEntry(root, width=300)
 url_entry.grid(row=1, column=1, padx=5, pady=5, sticky="nsew")
 
-browse = Ctk.CTkButton(root, text="Browse files", command=browse)
-browse.grid(row=2, column=0, padx=5, pady=5, sticky="nsew")
+browse_button = Ctk.CTkButton(root, text="Browse files", command=browse)
+browse_button.grid(row=2, column=0, padx=5, pady=5, sticky="nsew")
 
 transcribe_button = Ctk.CTkButton(root, text="Transcribe", command=transcribe)
 transcribe_button.grid(row=2, column=1, padx=5, pady=5, sticky="nsew")
